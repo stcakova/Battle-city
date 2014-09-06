@@ -1,11 +1,12 @@
 import pygame
 from pygame import rect
+
 from constants import *
-from part import  Wall
+from part import Wall, Brick
 
 
 class World:
-    world = [[None for x in range(50)] for y in range(50)]
+    world = [[None for x in range(26)] for y in range(19)]
 
     def __init__(self):
         self.brick = pygame.image.load("pictures/brick.jpeg")
@@ -13,20 +14,27 @@ class World:
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         self.phoenix = pygame.image.load("pictures/phoenix.jpg")
         self.phoenix = pygame.transform.scale(
-            self.phoenix, (PART_SIZE*2, PART_SIZE*2))
+            self.phoenix, (PART_SIZE * 2, PART_SIZE * 2))
 
-    def draw_world(self):
-        maps = open(MAP)
+    def extract_world(self, multiplayer):
+        if not multiplayer:
+            maps = open(MAP)
+        else:
+            maps = open(MULTIPLAYER_MAP)
         for height, line in enumerate(maps):
             for width, element in enumerate(line):
-                if element != '\n' and element != '_':
-                    self._draw_element(element, (width* PART_SIZE, height*PART_SIZE))
+                if element == 'B' or element == 'F':
+                    self.world[height][width] = Wall(
+                        (width * PART_SIZE, height * PART_SIZE))
+                elif element == '#':
+                    self.world[height][width] = Brick(
+                        (width * PART_SIZE, height * PART_SIZE))
 
-    def _draw_element(self, letter, coords):
+    def draw_world(self, multiplayer):
+        for wall in walls:
+            if wall.existing:
+                wall.draw()
+
         self.screen.blit(self.phoenix, (440, 640))
-        if letter == 'B':
-            self.screen.blit(self.brick, (coords[0], coords[1]))
-            Wall(coords)
-        elif letter == '#':
-            self.screen.blit(self.wall, (coords[0], coords[1]))
-            Wall(coords)
+        if multiplayer:
+            self.screen.blit(self.phoenix, (440, 0))
