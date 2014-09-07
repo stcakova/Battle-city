@@ -40,8 +40,8 @@ class Game:
         self.enemy_tank2 = TankWrapper(
             [580, 380], 'r', (0, 0), "pictures/enemy.png")
 
-        self.tank.enemy = (self.tank2, self.enemy_tank)
-        self.tank2.enemy = (self.tank, self.enemy_tank)
+        self.tank.enemy = (self.tank2, self.enemy_tank, self.enemy_tank2)
+        self.tank2.enemy = (self.tank, self.enemy_tank, self.enemy_tank2)
         self.enemy_tank.enemy = (self.tank2, self.tank)
         self.enemy_tank2.enemy = (self.tank2, self.tank)
 
